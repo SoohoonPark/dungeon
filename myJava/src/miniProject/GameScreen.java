@@ -58,7 +58,7 @@ public class GameScreen extends JFrame {
 	private static int mobatk, mobdef; // 몬스터의 공격력 & 방어력
 	private static String[] dropitem; // 몬스터의 드랍아이템 (DungeonMonster 클래스의 getdropitem()를 통해 저장됨.)
 	private static Thread m_check, p_check; // 플레이어 & 몬스터 상태 체크하는 Thread
-	private static List<String> inventory = new LinkedList<String>(); // 캐릭터 인벤토리 해시맵
+	private static LinkedList<String> inventory = new LinkedList<String>(); // 캐릭터 인벤토리 
 	private static Map<String, DungeonMonster> monsters = new HashMap<String, DungeonMonster>(); // 몬스터 정보 해시맵
 	private static Map<Integer, DungeonExpTable> exptable = new HashMap<Integer, DungeonExpTable>(); // 캐릭터 경험치 테이블
 	private static String mobkey; // 생성된 몹 이름 (몬스터 정보 해시맵의 key)
@@ -158,6 +158,25 @@ public class GameScreen extends JFrame {
 					btnShowStatus.setEnabled(false);
 				}
 				new StatusScreen(c_name, c_job, c_lv, c_exp, c_next_exp, c_str, c_dex, c_int);
+			}
+		});
+		
+		JButton btnRun = new JButton("도망치기");
+		btnRun.setBounds(305, 60, 100, 30);
+		btnRun.setFont(TEXTFONT);
+		btnRun.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if(battle) {
+					addLog("[System] '"+c_name+"' (은/는) 죽을 힘을 다해 도망쳤다!");
+					addLog("["+c_name+"] : 헉헉... 죽을 뻔 했네... 휴..\n");
+					battle = false;
+				}else {
+					buttonindex = 3;
+					createAlertWindow(buttonindex);
+				}
 			}
 		});
 		
@@ -283,6 +302,7 @@ public class GameScreen extends JFrame {
 		statusPanel.add(mpbar);
 		
 		statusPanel.add(btnShowStatus);
+		statusPanel.add(btnRun);
 
 		// 버튼 패널
 		btnPanel.add(btnSearch);
@@ -328,8 +348,10 @@ public class GameScreen extends JFrame {
 						
 						/** Thread가 실행되면서 hpbar & mpbar 에 setValue() 해줌. (setText()도 마찬가지) **/
 						hpbar.setString(String.valueOf(current_player_health) + " / " + String.valueOf(c_hp));
+						hpbar.setMaximum(c_hp);
 						hpbar.setValue(current_player_health);
 						mpbar.setString(String.valueOf(current_player_mana) + " / " + String.valueOf(c_mp));
+						mpbar.setMaximum(c_mp);
 						mpbar.setValue(current_player_mana);
 						
 						/** 캐릭터 레벨업 체크 **/
@@ -615,6 +637,11 @@ public class GameScreen extends JFrame {
 				warntext.setFont(TEXTFONT);
 				JOptionPane.showMessageDialog(this, warntext, "공격", JOptionPane.ERROR_MESSAGE);
 			}
+			break;
+		case 3: // 도망치기 버튼
+			warntext = new JLabel("<html>몬스터가 존재하지 않습니다.</html>");
+			warntext.setFont(TEXTFONT);
+			JOptionPane.showMessageDialog(this, warntext, "도망치기", JOptionPane.ERROR_MESSAGE);
 			break;
 		case 6: // 게임종료 버튼
 			warntext = new JLabel("<html>게임을 종료하시겠습니까?<br/>진행상황은 저장되지 않습니다.</html>");
