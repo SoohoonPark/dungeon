@@ -14,6 +14,7 @@ import javax.swing.JLabel;
  * 프로그램 첫 실행시 보게되는 창
  * 버튼에 각각 리스너를 달아서 클릭 시 이벤트 처리를 하도록 한다.
  */
+@SuppressWarnings("serial")
 public class MainScreen extends JFrame{
 	private Image titleimg = Toolkit.getDefaultToolkit().createImage("resources/images/title.png");
 	

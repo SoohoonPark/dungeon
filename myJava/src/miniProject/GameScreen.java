@@ -30,6 +30,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 /** 게임이 진행되는 화면 **/
+@SuppressWarnings("serial")
 public class GameScreen extends JFrame {
 	private final static Font TEXTFONT = new Font("돋움", Font.PLAIN, 14);
 	private final static Image bgimg = new ImageIcon(Toolkit.getDefaultToolkit().createImage("resources/images/dungeonbackground.png")).getImage();
@@ -665,7 +666,7 @@ public class GameScreen extends JFrame {
 		p.repaint();
 	}
 	
-	// 인벤토리 버튼 활성화 & 비활성화 위한 getbutton
+	// 인벤토리 버튼 활성화 & 비활성화 위한 getbutton 메소드
 	public static JButton getInventorybutton() {
 		return btnInventory;
 	}
@@ -678,4 +679,5 @@ public class GameScreen extends JFrame {
 	public static void setInventory(LinkedList<String> inventory){
 		GameScreen.inventory = inventory;
 	}
+
 }

@@ -7,9 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.LinkedList;
-import java.util.List;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -17,14 +15,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 
+@SuppressWarnings("serial")
 public class InventoryScreen extends JFrame {
-	private static LinkedList<String> inventory = new LinkedList<String>();
+	private static JList<String> inventorylist; // 인벤토리 리스트(출력)
+	private static LinkedList<String> inventory = new LinkedList<String>(); // 인벤토리 리스트
+	private static String[] inventorydata; // 인벤토리 리스트 데이터
+	private static Thread checkinventory; // 인벤토리 확인 Thread
 
 	public InventoryScreen(LinkedList<String> inventory) {
 		System.out.println("[info] 인벤토리 열림");
 		InventoryScreen.inventory = inventory;
-		System.out.println("[info] 인벤토리 크기 : " + InventoryScreen.inventory.size());
 		createInventoryScreen();
+		runThread();
 	}
 
 	public void createInventoryScreen() {
@@ -34,8 +36,8 @@ public class InventoryScreen extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		String[] inventorydata = inventory.toArray(new String[inventory.size()]);
-		JList<String> inventorylist = new JList<String>(inventorydata);
+		inventorydata = inventory.toArray(new String[inventory.size()]);
+		inventorylist = new JList<String>(inventorydata);
 		JScrollPane scroll = new JScrollPane(inventorylist);
 		scroll.setBounds(10, 10, 200, 160);
 		
@@ -50,7 +52,11 @@ public class InventoryScreen extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				if(inventorylist.getSelectedValue().equals("체력 물약")) {
+					System.out.println("[info] 체력 물약 사용");
+				}else if(inventorylist.getSelectedValue().indexOf("마나 물약") != 0) {
+					System.out.println("[info] 마나 물약 사용");
+				}
 			}
 		});
 		
@@ -93,12 +99,37 @@ public class InventoryScreen extends JFrame {
 				System.out.println("[info] 현재 인벤토리 크기 : "+ inventory.size());
 				GameScreen.setInventory(inventory);
 				System.out.println("[info] 현재 인벤토리 상태 저장 완료");
+				checkinventory.interrupt();
+				if(checkinventory.isInterrupted()) {
+					System.out.println("[info] 인벤토리 확인 Thread 종료");
+				}
 				btninventory.setEnabled(true);
 			}
 		});
 	}
 	
+	// GameScreen 에서 인벤토리 내용 가져오기 위한 메소드(인벤토리 최신화)
 	public LinkedList<String> getInventory(){
 		return inventory;
+	}
+	
+	// 인벤토리 확인 Thread
+	void runThread() {
+		System.out.println("[info] 인벤토리 확인 Thread 동작");
+		checkinventory = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					while(!Thread.currentThread().isInterrupted()) {
+						System.out.println("[info] 인벤토리 크기 : " + inventory.size());
+						inventorydata = inventory.toArray(new String[inventory.size()]);
+						inventorylist = new JList<String>(inventorydata);
+					}
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		checkinventory.start();
 	}
 }
