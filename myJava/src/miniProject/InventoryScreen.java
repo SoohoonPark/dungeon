@@ -54,10 +54,9 @@ public class InventoryScreen extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(inventory.getSelectedValue().equals("체력 물약")) {
-					System.out.println("[info] 체력 물약 사용");
-				}else if(inventory.getSelectedValue().equals("마나 물약")) {
-					System.out.println("[info] 마나 물약 사용");
+				// 아이템 목록 중 "물약" 이라는 문자열이 있으면(체력,마나물약 사용)
+				if(inventory.getSelectedValue().indexOf("물약") != 0) {
+					System.out.println(inventory.getSelectedValue());
 				}
 			}
 		});
