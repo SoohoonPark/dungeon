@@ -38,7 +38,7 @@ public class GameScreen extends JFrame {
 	private static JTextArea log = new JTextArea();
 	private static JScrollPane logscroll;
 	private static JButton btnSearch, btnAttack, btnSkill,btnEquip, btnExit;
-	static JButton btnShowStatus,btnInventory;
+	private static JButton btnShowStatus,btnInventory;
 	private static JPanel btnPanel, statusPanel;
 	private static JLabel clv, cname, cgrade, cexp, cnextexp;
 	private static JProgressBar hpbar, mpbar;
@@ -62,9 +62,6 @@ public class GameScreen extends JFrame {
 	private static Map<String, DungeonMonster> monsters = new HashMap<String, DungeonMonster>(); // 몬스터 정보 해시맵
 	private static Map<Integer, DungeonExpTable> exptable = new HashMap<Integer, DungeonExpTable>(); // 캐릭터 경험치 테이블
 	private static String mobkey; // 생성된 몹 이름 (몬스터 정보 해시맵의 key)
-	private static Connection conn = null; // DB 연결 객체
-	private static PreparedStatement pstmt = null; // DB 상태 객체
-	private static ResultSet rs = null; // DB 결과 객체
 
 	// default 생성자
 	public GameScreen() {
@@ -102,6 +99,7 @@ public class GameScreen extends JFrame {
 
 		log.setEditable(false);
 		log.setFont(TEXTFONT);
+		log.setText("[System] '"+c_name+"' (이/가) 던전에 들어왔습니다.\n무사히 살아남으세요\n");
 		logscroll = new JScrollPane(log);
 		logscroll.setBounds(23, 230, 450, 200);
 		add(logscroll);
@@ -150,7 +148,6 @@ public class GameScreen extends JFrame {
 		btnShowStatus.setBounds(220, 60, 80, 30);
 		btnShowStatus.setFont(TEXTFONT);
 		btnShowStatus.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -164,8 +161,7 @@ public class GameScreen extends JFrame {
 		JButton btnRun = new JButton("도망치기");
 		btnRun.setBounds(305, 60, 100, 30);
 		btnRun.setFont(TEXTFONT);
-		btnRun.addActionListener(new ActionListener() {
-			
+		btnRun.addActionListener(new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
@@ -216,7 +212,6 @@ public class GameScreen extends JFrame {
 		btnSearch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
 				buttonindex = 1; // 1은 탐색하기 버튼
 				if(battle) { // 전투가 발생했을때 탐색하기 버튼을 눌리면 알림창 띄움.
 					createAlertWindow(buttonindex);
@@ -248,7 +243,6 @@ public class GameScreen extends JFrame {
 		btnSkill.setBounds(120, 55, 90, 40);
 		btnSkill.setFont(new Font("굴림", Font.PLAIN, 14));
 		btnSkill.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				current_player_mana -= 10;
@@ -259,7 +253,6 @@ public class GameScreen extends JFrame {
 		btnInventory.setBounds(215, 5, 90, 40);
 		btnInventory.setFont(new Font("굴림", Font.PLAIN, 14));
 		btnInventory.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource().toString().indexOf("인벤토리") != 0) {
@@ -325,7 +318,7 @@ public class GameScreen extends JFrame {
 
 	// JTextArea에 로그를 덧붙이는 메소드
 	private static void addLog(String txt) {
-		log.append(txt + "\n");
+		log.append(txt+"\n"+"");
 		int txtlength = log.getText().length(); // JTextarea 문자열 총 길이
 		log.setCaretPosition(txtlength); // 구한 문자열 길이를 caretposition 설정함
 		log.requestFocus(); // 맨 끝으로 이동한 caret 을 기준으로 focus 재설정 하는듯..?
@@ -445,7 +438,7 @@ public class GameScreen extends JFrame {
 	// 몬스터 정보 저장(DB 연동)
 	private static void setmonsters() {
 		System.out.println("[info] setmonsters() 실행");
-		conn = DBConnection.connectDB();
+		Connection conn = DBConnection.connectDB();
 		String query = "SELECT * FROM MONSTERS";
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
@@ -473,7 +466,7 @@ public class GameScreen extends JFrame {
 	// 경험치 테이블 정보 저장(DB 연동)
 	private static void setexptable() {
 		System.out.println("[info] setexptable() 실행");
-		conn = DBConnection.connectDB();
+		Connection conn = DBConnection.connectDB();
 		String query = "SELECT * FROM EXPTABLE";
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
@@ -568,8 +561,9 @@ public class GameScreen extends JFrame {
 			Set<String> mobkeys = monsters.keySet();
 			List<String> mobs = new ArrayList<String>(mobkeys);
 			int encountmob = (int)(Math.random() * mobs.size()); //
-			if(mobs.get(encountmob).equals("기분나쁜생물")) { // 최강몹
-				addLog("[System] 왠지 위험해 보여서 그 자리서 도망쳤다.\n");
+			if(mobs.get(encountmob).equals("햄버거왕")) { // 최강몹
+				addLog("[System] '"+c_name+"' (은/는) 위험해 보여서 그 자리서 도망쳤다.\n");
+				addLog("["+c_name+"] : 근데 왠지 맛있어 보였는데...");
 				battle = false;
 				return;
 			}
@@ -669,5 +663,19 @@ public class GameScreen extends JFrame {
 	private void changeBackgroundImage(JPanel p, Image img) {
 		BackgroundPanel.setImg(img);
 		p.repaint();
+	}
+	
+	// 인벤토리 버튼 활성화 & 비활성화 위한 getbutton
+	public static JButton getInventorybutton() {
+		return btnInventory;
+	}
+	
+	public static JButton getStatusbutton() {
+		return btnShowStatus;
+	}
+	
+	// 인벤토리 정보 저장
+	public static void setInventory(LinkedList<String> inventory){
+		GameScreen.inventory = inventory;
 	}
 }

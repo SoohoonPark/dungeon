@@ -126,7 +126,6 @@ public class StatusScreen extends JFrame{
 		btnClose.setBounds(60, 10, 100, 25);
 		btnClose.setFont(new Font("돋움",Font.PLAIN, 14));
 		btnClose.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -142,7 +141,8 @@ public class StatusScreen extends JFrame{
 		// 윈도우리스너 (해당 창이 닫히면 리스너에서 GameScreen의 능력치 버튼을 활성화(setEnabled(true)) 해줌.
 		addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
-				GameScreen.btnShowStatus.setEnabled(true);
+				JButton btnstatus = GameScreen.getStatusbutton();
+				btnstatus.setEnabled(true);
 			}
 		});
 

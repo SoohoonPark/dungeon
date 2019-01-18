@@ -18,12 +18,12 @@ import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 
 public class InventoryScreen extends JFrame {
-	private LinkedList<String> inventory = new LinkedList<String>();
+	private static LinkedList<String> inventory = new LinkedList<String>();
 
 	public InventoryScreen(LinkedList<String> inventory) {
 		System.out.println("[info] 인벤토리 열림");
-		this.inventory = inventory;
-		System.out.println("[info] 인벤토리 크기 : " + this.inventory.size());
+		InventoryScreen.inventory = inventory;
+		System.out.println("[info] 인벤토리 크기 : " + InventoryScreen.inventory.size());
 		createInventoryScreen();
 	}
 
@@ -46,6 +46,13 @@ public class InventoryScreen extends JFrame {
 		JButton btnUseitem = new JButton("사용");
 		btnUseitem.setBounds(10, 10, 80, 30);
 		btnUseitem.setFont(new Font("굴림", Font.PLAIN, 14));
+		btnUseitem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		
 		JButton btnDropitem = new JButton("버리기");
 		btnDropitem.setBounds(10, 50, 80, 30);
@@ -54,7 +61,6 @@ public class InventoryScreen extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -82,9 +88,17 @@ public class InventoryScreen extends JFrame {
 		// 윈도우리스너 (해당 창이 닫히면 리스너에서 GameScreen의 능력치 버튼을 활성화(setEnabled(true)) 해줌.
 		addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
-				
-				GameScreen.btnInventory.setEnabled(true);
+				JButton btninventory = GameScreen.getInventorybutton();
+				LinkedList<String> inventory = getInventory();
+				System.out.println("[info] 현재 인벤토리 크기 : "+ inventory.size());
+				GameScreen.setInventory(inventory);
+				System.out.println("[info] 현재 인벤토리 상태 저장 완료");
+				btninventory.setEnabled(true);
 			}
 		});
+	}
+	
+	public LinkedList<String> getInventory(){
+		return inventory;
 	}
 }
