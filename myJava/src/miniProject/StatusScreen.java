@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+@SuppressWarnings("serial")
 public class StatusScreen extends JFrame{
 	private String c_name, c_grade;
 	private int c_lv, c_exp, c_nextexp;

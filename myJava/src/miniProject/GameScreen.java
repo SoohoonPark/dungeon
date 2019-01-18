@@ -59,7 +59,7 @@ public class GameScreen extends JFrame {
 	private static int mobatk, mobdef; // 몬스터의 공격력 & 방어력
 	private static String[] dropitem; // 몬스터의 드랍아이템 (DungeonMonster 클래스의 getdropitem()를 통해 저장됨.)
 	private static Thread m_check, p_check; // 플레이어 & 몬스터 상태 체크하는 Thread
-	private static LinkedList<String> inventory = new LinkedList<String>(); // 캐릭터 인벤토리 
+	private static LinkedList<String> inventory = new LinkedList<String>(); // 캐릭터 인벤토리
 	private static Map<String, DungeonMonster> monsters = new HashMap<String, DungeonMonster>(); // 몬스터 정보 해시맵
 	private static Map<Integer, DungeonExpTable> exptable = new HashMap<Integer, DungeonExpTable>(); // 캐릭터 경험치 테이블
 	private static String mobkey; // 생성된 몹 이름 (몬스터 정보 해시맵의 key)
@@ -100,7 +100,7 @@ public class GameScreen extends JFrame {
 
 		log.setEditable(false);
 		log.setFont(TEXTFONT);
-		log.setText("[System] '"+c_name+"' (이/가) 던전에 들어왔습니다.\n무사히 살아남으세요\n");
+		log.setText("[System] '"+c_name+"' (이/가) 던전에 들어왔습니다.\n무사히 살아남으세요\n\n");
 		logscroll = new JScrollPane(log);
 		logscroll.setBounds(23, 230, 450, 200);
 		add(logscroll);
@@ -319,7 +319,7 @@ public class GameScreen extends JFrame {
 
 	// JTextArea에 로그를 덧붙이는 메소드
 	private static void addLog(String txt) {
-		log.append(txt+"\n"+"");
+		log.append(txt+"\n");
 		int txtlength = log.getText().length(); // JTextarea 문자열 총 길이
 		log.setCaretPosition(txtlength); // 구한 문자열 길이를 caretposition 설정함
 		log.requestFocus(); // 맨 끝으로 이동한 caret 을 기준으로 focus 재설정 하는듯..?
@@ -431,7 +431,7 @@ public class GameScreen extends JFrame {
 			addLog("[System] '"+c_name+"' (은/는) "+dropitem[i]+" (을/를) 가방에 넣었다.");
 			inventory.add(dropitem[i]);
 		}
-		System.out.println("[info] 인벤토리 크기 : "+dropitem.length);
+		System.out.println("[info] 인벤토리 크기 : "+inventory.size());
 		mobkey = null;
 		battle = false;
 	}

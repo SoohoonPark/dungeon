@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.LinkedList;
-
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -17,18 +17,16 @@ import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
 public class InventoryScreen extends JFrame {
-	private static JList<String> inventorylist; // 인벤토리 리스트(출력)
-	private static LinkedList<String> inventory = new LinkedList<String>(); // 인벤토리 리스트
-	private static String[] inventorydata; // 인벤토리 리스트 데이터
-	private static Thread checkinventory; // 인벤토리 확인 Thread
-
+	private static JList<String> inventory; // 인벤토리 리스트(출력)
+	private LinkedList<String> inventorydata = new LinkedList<String>(); // 인벤토리 리스트 데이터
+	private DefaultListModel<String> model = null;
+	
 	public InventoryScreen(LinkedList<String> inventory) {
 		System.out.println("[info] 인벤토리 열림");
-		InventoryScreen.inventory = inventory;
+		this.inventorydata = inventory;
 		createInventoryScreen();
-		runThread();
 	}
-
+	
 	public void createInventoryScreen() {
 		setTitle("인벤토리");
 		setBounds(1210, 495, 350, 210);
@@ -36,9 +34,13 @@ public class InventoryScreen extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		inventorydata = inventory.toArray(new String[inventory.size()]);
-		inventorylist = new JList<String>(inventorydata);
-		JScrollPane scroll = new JScrollPane(inventorylist);
+		model = new DefaultListModel<String>();
+		for(int i=0; i<inventorydata.size(); i++) {
+			model.addElement(inventorydata.get(i));
+		}
+		
+		inventory = new JList<String>(model);
+		JScrollPane scroll = new JScrollPane(inventory);
 		scroll.setBounds(10, 10, 200, 160);
 		
 		JPanel panelButtons = new JPanel(null);
@@ -52,9 +54,9 @@ public class InventoryScreen extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(inventorylist.getSelectedValue().equals("체력 물약")) {
+				if(inventory.getSelectedValue().equals("체력 물약")) {
 					System.out.println("[info] 체력 물약 사용");
-				}else if(inventorylist.getSelectedValue().indexOf("마나 물약") != 0) {
+				}else if(inventory.getSelectedValue().equals("마나 물약")) {
 					System.out.println("[info] 마나 물약 사용");
 				}
 			}
@@ -64,10 +66,21 @@ public class InventoryScreen extends JFrame {
 		btnDropitem.setBounds(10, 50, 80, 30);
 		btnDropitem.setFont(new Font("굴림", Font.PLAIN, 14));
 		btnDropitem.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				try {
+					System.out.println("[info] 아이템 버리기 전 크기 : "+inventorydata.size());
+					inventorydata.remove(inventory.getSelectedIndex());
+					System.out.println("[info] 아이템 데이터 제거 후 : "+inventorydata.size());
+					model.clear(); // 아이템 제거가 되면 일단 model 안의 내용물을 clear 시킴
+					for(int i=0; i<inventorydata.size(); i++) {
+						model.addElement(inventorydata.get(i)); // 반복문을 통해 model에 남은 아이템 add
+						System.out.println(model.get(i));
+					}
+					inventory.setModel(model); // JList에 model을 set해서 아이템 버린 후 인벤토리 보여줌
+				}catch(Exception exception) {
+					System.out.println("[Error] 인벤토리가 비어있어서 버리기를 할 수 없습니다.");
+				}
 			}
 		});
 		
@@ -94,42 +107,14 @@ public class InventoryScreen extends JFrame {
 		// 윈도우리스너 (해당 창이 닫히면 리스너에서 GameScreen의 능력치 버튼을 활성화(setEnabled(true)) 해줌.
 		addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
+				// GameScreen 의 인벤토리 버튼을 가져옴
 				JButton btninventory = GameScreen.getInventorybutton();
-				LinkedList<String> inventory = getInventory();
-				System.out.println("[info] 현재 인벤토리 크기 : "+ inventory.size());
-				GameScreen.setInventory(inventory);
+				// GameScreen 의 인벤토리 정보에 현재 인벤토리 내용물을 넘긴다
+				GameScreen.setInventory(inventorydata);
 				System.out.println("[info] 현재 인벤토리 상태 저장 완료");
-				checkinventory.interrupt();
-				if(checkinventory.isInterrupted()) {
-					System.out.println("[info] 인벤토리 확인 Thread 종료");
-				}
+				// GameScreen의 인벤토리 버튼 활성화
 				btninventory.setEnabled(true);
 			}
 		});
-	}
-	
-	// GameScreen 에서 인벤토리 내용 가져오기 위한 메소드(인벤토리 최신화)
-	public LinkedList<String> getInventory(){
-		return inventory;
-	}
-	
-	// 인벤토리 확인 Thread
-	void runThread() {
-		System.out.println("[info] 인벤토리 확인 Thread 동작");
-		checkinventory = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					while(!Thread.currentThread().isInterrupted()) {
-						System.out.println("[info] 인벤토리 크기 : " + inventory.size());
-						inventorydata = inventory.toArray(new String[inventory.size()]);
-						inventorylist = new JList<String>(inventorydata);
-					}
-				}catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		checkinventory.start();
 	}
 }

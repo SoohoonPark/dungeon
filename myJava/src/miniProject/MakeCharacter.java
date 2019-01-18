@@ -4,17 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.Socket;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 /*
@@ -22,6 +18,7 @@ import javax.swing.JTextField;
  * 서버에서 DB에 데이터들을 넣게됨.
  */
 
+@SuppressWarnings("serial")
 public class MakeCharacter extends JFrame {
 	
 	private final static int c_str = 10, c_dex = 10, c_int = 10; // 캐릭터의 초기 스탯
