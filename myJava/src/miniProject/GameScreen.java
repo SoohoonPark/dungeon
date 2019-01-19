@@ -154,10 +154,7 @@ public class GameScreen extends JFrame {
 		btnShowStatus.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				if (e.getSource().toString().indexOf("능력치") != 0) {
-					btnShowStatus.setEnabled(false);
-				}
+				btnShowStatus.setEnabled(false);
 				new StatusScreen(c_name, c_job, c_lv, c_exp, c_next_exp, c_str, c_dex, c_int);
 			}
 		});
@@ -275,9 +272,8 @@ public class GameScreen extends JFrame {
 		});
 
 		// 게임종료
-		btnExit = new JButton("게임종료");
-		btnExit.setBounds(320, 18, 90, 60);
-		btnExit.setFont(new Font("굴림", Font.PLAIN, 14));
+		btnExit = new JButton(new ImageIcon(Toolkit.getDefaultToolkit().createImage("resources/images/button/btn_exit.png")));
+		btnExit.setBounds(320, 18, 90, 40);
 		btnExit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

@@ -16,7 +16,7 @@ import javax.swing.JLabel;
  */
 @SuppressWarnings("serial")
 public class MainScreen extends JFrame{
-	private Image titleimg = Toolkit.getDefaultToolkit().createImage("resources/images/title.png");
+	private Image titleimg = Toolkit.getDefaultToolkit().createImage("resources/images/main/title.png");
 	
 	public static void main(String[] args) {
 		System.out.println("[info] 프로그램 실행");
