@@ -42,20 +42,25 @@ public class MakeCharacter extends JFrame {
 		setSize(300, 270);
 		setLocationRelativeTo(null);
 		setResizable(false);
+		getContentPane().setBackground(Color.WHITE);
 		setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		/** 패널들 **/
 		id = new JPanel(null);
+		id.setBackground(Color.WHITE);
 		id.setBounds(0, 10, 300, 40);
 		
 		lvjob = new JPanel(null);
+		lvjob.setBackground(Color.WHITE);
 		lvjob.setBounds(0, 70, 300, 40);
 		
 		stats = new JPanel(null);
+		stats.setBackground(Color.WHITE);
 		stats.setBounds(0, 100, 300, 70);
 		
 		buttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		buttons.setBackground(Color.WHITE);
 		buttons.setBounds(0, 180, 300, 50);
 		
 		/** 라벨들 **/
@@ -89,7 +94,7 @@ public class MakeCharacter extends JFrame {
 		cHp2.setFont(new Font("굴림", Font.PLAIN, 14));
 		cHp2.setForeground(Color.RED);
 		
-		cMp = new JLabel("마력");
+		cMp = new JLabel("마나");
 		cMp.setBounds(110, 10, 40, 20);
 		cMp.setFont(new Font("굴림", Font.PLAIN, 14));
 		

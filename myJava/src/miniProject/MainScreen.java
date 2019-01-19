@@ -1,5 +1,6 @@
 package miniProject;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -28,6 +29,7 @@ public class MainScreen extends JFrame{
 		setTitle("던전에서 살아남기");
 		setLayout(null);
 		setSize(400, 540);
+		getContentPane().setBackground(Color.WHITE);
 		// setLocationRelativeTo(null) 을 하게되면 현재 모니터 중앙에 frame이 뜬다.
 		setLocationRelativeTo(null); 
 		setResizable(false);

@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 
+// 인벤토리(가방) 화면 보여주는 클래스
 @SuppressWarnings("serial")
 public class InventoryScreen extends JFrame {
 	private static JList<String> inventory; // 인벤토리 리스트(출력)
@@ -117,6 +118,6 @@ public class InventoryScreen extends JFrame {
 	
 	// 아이템 사용
 	public void useItem(String selecteditem) {
-		
+		GameScreen.addLog(selecteditem);
 	}
 }

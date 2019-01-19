@@ -46,34 +46,30 @@ public class GameScreen extends JFrame {
 	private static JLabel clv, cname, cgrade, cexp, cnextexp;
 	private static JProgressBar hpbar, mpbar;
 
-	private static int c_str, c_dex, c_int; // 캐릭터의 스탯
-	private static int c_hp, c_mp, c_lv, c_exp, c_next_exp; // 캐릭터의 체력, 마력, 레벨, 현재경험치, 다음경험치
+	public static int c_str, c_dex, c_int; // 캐릭터의 힘,민첩,지능
+	public static int c_hp, c_mp; // 체력, 마력
+	public static int playeratk; // 플레이어의 공격력
+	public static int playerdef; // 플레이어의 방어력
+	public static String c_helmet, c_body, c_weapon, c_shield, c_boots, c_gloves; // 캐릭터가 장착하고 있는 투구,갑옷,무기,방패,신발,장갑
+	
+	private static String mobkey; // 생성된 몹 이름 (몬스터 정보 해시맵의 key)
+	private static int c_lv, c_exp, c_next_exp; // 캐릭터의 레벨, 현재경험치, 다음경험치
 	private static String c_name, c_job; // 캐릭터명, 등급
-
-	private static boolean battle = false; // 전투 생성 시 true로
 	private static int buttonindex; // 어떤 버튼을 눌렸는지 체크
 	private static int enemy_health; // 등장한 적의 원래 체력
 	private static int current_enemy_health; // 등장한 적의 현재 체력
 	private static int current_player_health; // 플레이어의 현재 체력
 	private static int current_player_mana; // 플레이어의 현재 마력
-	private static int playeratk; // 플레이어의 공격력
-	private static int playerdef; // 플레이어의 방어력
 	private static int mobatk, mobdef; // 몬스터의 공격력 & 방어력
 	private static String[] dropitem; // 몬스터의 드랍아이템 (DungeonMonster 클래스의 getdropitem()를 통해 저장됨.)
 	private static Thread m_check, p_check; // 플레이어 & 몬스터 상태 체크하는 Thread
 	private static LinkedList<String> inventory = new LinkedList<String>(); // 캐릭터 인벤토리
 	private static Map<String, DungeonMonster> monsters = new HashMap<String, DungeonMonster>(); // 몬스터 정보 해시맵
 	private static Map<Integer, DungeonExpTable> exptable = new HashMap<Integer, DungeonExpTable>(); // 캐릭터 경험치 테이블
-	private static String mobkey; // 생성된 몹 이름 (몬스터 정보 해시맵의 key)
-
-	// default 생성자
-	public GameScreen() {
-		super();
-	}
-
+	private static boolean battle = false; // 전투 생성 시 true로
+	
 	// 게임화면 생성
-	public void createGameScreen(int s, int d, int i, int hp, int mp, int lv, int exp, int nextexp, String name,
-			String job) {
+	public void createGameScreen(int s, int d, int i, int hp, int mp, int lv, int exp, int nextexp, String name, String job) {
 		System.out.println("[info] createGameScreen() 실행");
 		c_str = s;
 		c_dex = d;
@@ -85,6 +81,12 @@ public class GameScreen extends JFrame {
 		c_next_exp = nextexp;
 		c_name = name;
 		c_job = job;
+		c_helmet = "없음";
+		c_body = "없음";
+		c_weapon = "없음";
+		c_boots = "없음";
+		c_gloves = "없음";
+		c_shield = "없음";
 		current_player_health = hp; // 플레이어의 현재 체력 (전투 진행되거나 특정 이벤트에 의해서 계속 바뀜)
 		current_player_mana = mp; // 플레이어의 현재 마력 (전투 진행되거나 특정 이벤트에 의해서 계속 바뀜)
 
@@ -184,10 +186,10 @@ public class GameScreen extends JFrame {
 
 		hpbar = new JProgressBar(0, c_hp);
 		hpbar.setBounds(50, 30, 160, 20);
-		hpbar.setStringPainted(true);
+		hpbar.setStringPainted(true); // progressbar 안에 string 출력
 		hpbar.setString(String.valueOf(current_player_health) + " / " + String.valueOf(c_hp));
 		hpbar.setFont(new Font("굴림", Font.BOLD, 13));
-		hpbar.setForeground(Color.RED);
+		hpbar.setForeground(Color.RED); // progressbar 배경색
 		hpbar.setValue(current_player_health);
 
 		// 현재 마나
@@ -197,16 +199,17 @@ public class GameScreen extends JFrame {
 
 		mpbar = new JProgressBar(0, c_mp);
 		mpbar.setBounds(50, 55, 160, 20);
-		mpbar.setStringPainted(true);
+		mpbar.setStringPainted(true); // progressbar 안에 string 출력
 		mpbar.setString(String.valueOf(current_player_mana) + " / " + String.valueOf(c_mp));
 		mpbar.setFont(new Font("굴림", Font.BOLD, 13));
-		mpbar.setForeground(Color.BLUE);
+		mpbar.setForeground(Color.BLUE); // progressbar 배경색
 		mpbar.setValue(current_player_mana);
 
 		/** 버튼 패널 & 버튼들 설정 **/
 		btnPanel = new JPanel(null);
 		btnPanel.setBounds(35, 550, 425, 100);
 
+		// 탐색 버튼
 		btnSearch = new JButton(new ImageIcon(Toolkit.getDefaultToolkit().createImage("resources/images/button/btn_search.png")));
 		btnSearch.setBounds(15, 18, 90, 40);
 		btnSearch.addActionListener(new ActionListener() {
@@ -282,7 +285,6 @@ public class GameScreen extends JFrame {
 			}
 		});
 
-		/** 패널에 컴포넌트들 add **/
 		// 능력치 패널
 		statusPanel.add(lbl_lv);
 		statusPanel.add(clv);
@@ -322,7 +324,7 @@ public class GameScreen extends JFrame {
 	}
 
 	// JTextArea에 로그를 덧붙이는 메소드
-	private static void addLog(String txt) {
+	public static void addLog(String txt) {
 		log.append(txt + "\n");
 		int txtlength = log.getText().length(); // JTextarea 문자열 총 길이
 		log.setCaretPosition(txtlength); // 구한 문자열 길이를 caretposition 설정함
@@ -692,7 +694,7 @@ public class GameScreen extends JFrame {
 		p.repaint();
 	}
 
-	// 인벤토리 버튼 활성화 & 비활성화 위한 getbutton 메소드
+	// 인벤토리 / 능력치 버튼 활성화 & 비활성화 위한 getbutton 메소드
 	public static JButton getInventorybutton() {
 		return btnInventory;
 	}
