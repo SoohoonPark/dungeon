@@ -34,9 +34,9 @@ import javax.swing.SwingConstants;
 public class GameScreen extends JFrame {
 	private final static Font TEXTFONT = new Font("돋움", Font.PLAIN, 14);
 	private final static Image bgimg = new ImageIcon(
-			Toolkit.getDefaultToolkit().createImage("resources/images/dungeonbackground.png")).getImage();
+			Toolkit.getDefaultToolkit().createImage("resources/images/background/dungeonbackground.png")).getImage();
 	private final static Image tresureimg = new ImageIcon(
-			Toolkit.getDefaultToolkit().createImage("resources/images/gettresure.png")).getImage();
+			Toolkit.getDefaultToolkit().createImage("resources/images/background/dungeontresure.png")).getImage();
 	private static BackgroundPanel bgpanel;
 	private static JTextArea log = new JTextArea();
 	private static JScrollPane logscroll;
@@ -210,9 +210,8 @@ public class GameScreen extends JFrame {
 		btnPanel = new JPanel(null);
 		btnPanel.setBounds(35, 550, 425, 100);
 
-		btnSearch = new JButton("탐색하기");
-		btnSearch.setBounds(15, 18, 90, 60);
-		btnSearch.setFont(new Font("굴림", Font.PLAIN, 14));
+		btnSearch = new JButton(new ImageIcon(Toolkit.getDefaultToolkit().createImage("resources/images/button/btn_search.png")));
+		btnSearch.setBounds(15, 18, 90, 40);
 		btnSearch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -226,9 +225,9 @@ public class GameScreen extends JFrame {
 			}
 		});
 
-		btnAttack = new JButton("공격");
+		// 공격 버튼
+		btnAttack = new JButton(new ImageIcon(Toolkit.getDefaultToolkit().createImage("resources/images/button/btn_atk.png")));
 		btnAttack.setBounds(120, 5, 90, 40);
-		btnAttack.setFont(new Font("굴림", Font.PLAIN, 14));
 		btnAttack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -243,9 +242,9 @@ public class GameScreen extends JFrame {
 			}
 		});
 
-		btnSkill = new JButton("스킬");
+		// 스킬
+		btnSkill = new JButton(new ImageIcon(Toolkit.getDefaultToolkit().createImage("resources/images/button/btn_skill.png")));
 		btnSkill.setBounds(120, 55, 90, 40);
-		btnSkill.setFont(new Font("굴림", Font.PLAIN, 14));
 		btnSkill.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -253,23 +252,29 @@ public class GameScreen extends JFrame {
 			}
 		});
 
-		btnInventory = new JButton("인벤토리");
+		// 가방(인벤토리)
+		btnInventory = new JButton(new ImageIcon(Toolkit.getDefaultToolkit().createImage("resources/images/button/btn_inventory.png")));
 		btnInventory.setBounds(215, 5, 90, 40);
-		btnInventory.setFont(new Font("굴림", Font.PLAIN, 14));
 		btnInventory.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (e.getSource().toString().indexOf("인벤토리") != 0) {
-					btnInventory.setEnabled(false);
-				}
+				btnInventory.setEnabled(false);
 				new InventoryScreen(inventory);
 			}
 		});
 
-		btnEquip = new JButton("장비");
+		// 장비
+		btnEquip = new JButton(new ImageIcon(Toolkit.getDefaultToolkit().createImage("resources/images/button/btn_equip.png")));
 		btnEquip.setBounds(215, 55, 90, 40);
-		btnEquip.setFont(new Font("굴림", Font.PLAIN, 14));
+		btnEquip.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 
+		// 게임종료
 		btnExit = new JButton("게임종료");
 		btnExit.setBounds(320, 18, 90, 60);
 		btnExit.setFont(new Font("굴림", Font.PLAIN, 14));
