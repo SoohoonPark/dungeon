@@ -1,7 +1,13 @@
 package miniProject;
 
+import java.awt.Color;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 
 // ¿Â∫Ò√¢ ∫∏ø©¡÷¥¬ ≈¨∑°Ω∫
 @SuppressWarnings("serial")
@@ -21,7 +27,62 @@ public class EquipScreen extends JFrame{
 	
 	void createEquipScreen() {
 		setSize(300, 400);
+		setTitle("¿Â∫Ò");
 		setResizable(false);
+		setLayout(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JPanel panelEquip = new JPanel(null);
+		panelEquip.setBounds(23, 10, 250, 280);
+		panelEquip.setBorder(new LineBorder(Color.BLACK));
+		
+		JLabel lblHelmet = new JLabel();
+		lblHelmet.setBounds(100, 10, 50, 50);
+		lblHelmet.setBorder(new LineBorder(Color.RED));
+		
+		JLabel helmet = new JLabel("<html><p style='font-family:∏º¿∫ ∞ÌµÒ; color:blue;'>≈ı±∏</p></html>",SwingConstants.CENTER);
+		helmet.setBounds(100, 60, 50, 20);
+		
+		JLabel lblArmor = new JLabel();
+		lblArmor.setBounds(100, 85, 50, 50);
+		lblArmor.setBorder(new LineBorder(Color.RED));
+		
+		JLabel armor = new JLabel("<html><p style='font-family:∏º¿∫ ∞ÌµÒ; color:blue;'>∞©ø </p></html>",SwingConstants.CENTER);
+		armor.setBounds(100, 135, 50, 20);
+		
+		JLabel lblWeapon = new JLabel();
+		lblWeapon.setBounds(40, 85, 50, 50);
+		lblWeapon.setBorder(new LineBorder(Color.RED));
+		
+		JLabel weapon = new JLabel("<html><p style='font-family:∏º¿∫ ∞ÌµÒ; color:blue;'>π´±‚</p></html>",SwingConstants.CENTER);
+		weapon.setBounds(40, 135, 50, 20);
+		
+		JLabel lblShield = new JLabel();
+		lblShield.setBounds(160, 85, 50, 50);
+		lblShield.setBorder(new LineBorder(Color.RED));
+		
+		JLabel shield = new JLabel("<html><p style='font-family:∏º¿∫ ∞ÌµÒ; color:blue;'>πÊ∆–</p></html>",SwingConstants.CENTER);
+		shield.setBounds(160, 135, 50, 20);
+		
+		JLabel lblBoots = new JLabel();
+		lblBoots.setBounds(100, 160, 50, 50);
+		lblBoots.setBorder(new LineBorder(Color.RED));
+		
+		JLabel boots = new JLabel("<html><p style='font-family:∏º¿∫ ∞ÌµÒ; color:blue;'>Ω≈πﬂ</p></html>",SwingConstants.CENTER);
+		boots.setBounds(100, 210, 50, 20);
+		
+		panelEquip.add(lblHelmet);
+		panelEquip.add(helmet);
+		panelEquip.add(lblArmor);
+		panelEquip.add(armor);
+		panelEquip.add(lblWeapon);
+		panelEquip.add(weapon);
+		panelEquip.add(lblShield);
+		panelEquip.add(shield);
+		panelEquip.add(lblBoots);
+		panelEquip.add(boots);
+		
+		add(panelEquip);
 		setVisible(true);
 	}
 	
